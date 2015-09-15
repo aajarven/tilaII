@@ -18,7 +18,7 @@
            1.89999998    
            1.89999998
 
-        Rivillä 6 lasketaan kokonaisluvun ja liukuluvun osamäärä, jolloin tuloksena on liukuluku. Jakajalle on määritelty, että sen tallentamiseen käytetään 16 tavua, jolloin luku on tarkempi.
+        Rivillä 6 lasketaan kokonaisluvun ja tavallista tarkemman kind=16 -liukuluvun osamäärä, mikä huomataan tulosteen ensimmäisen rivin luvun muita suuremmasta tarkkuudesta.
 
         Rivillä 7 lasketaan kokonaisluvun ja kokonaisluvun osamäärä, joten tulos on katkaisemalla desimaalit saatu kokonaisluku.
 
