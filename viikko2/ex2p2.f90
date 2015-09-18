@@ -1,5 +1,6 @@
 program ex2p2
         implicit none
+        integer :: i
 
         write(*, "(A)") "do i=1,5"
         do i=1,5
