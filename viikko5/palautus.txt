@@ -1,0 +1,192 @@
+1)	Ohjelma:
+	  1 program ex5p1
+	  2         implicit none
+	  3         real :: tuumat = 0
+	  4 
+	  5         do 
+	  6                 write(*, "(F4.1, A8, F5.1, A3)") tuumat, " inch = ", tuumat*25.4, " mm"      
+	  7                 tuumat = tuumat + 0.5
+	  8                 if (tuumat>12) then
+	  9                         exit
+	 10                 end if
+	 11 
+	 12         end do
+	 13 end program
+
+	Output:
+	 0.0 inch =   0.0 mm
+	 0.5 inch =  12.7 mm
+	 1.0 inch =  25.4 mm
+	 1.5 inch =  38.1 mm
+	 2.0 inch =  50.8 mm
+	 2.5 inch =  63.5 mm
+	 3.0 inch =  76.2 mm
+	 3.5 inch =  88.9 mm
+	 4.0 inch = 101.6 mm
+	 4.5 inch = 114.3 mm
+	 5.0 inch = 127.0 mm
+	 5.5 inch = 139.7 mm
+	 6.0 inch = 152.4 mm
+	 6.5 inch = 165.1 mm
+	 7.0 inch = 177.8 mm
+	 7.5 inch = 190.5 mm
+	 8.0 inch = 203.2 mm
+	 8.5 inch = 215.9 mm
+	 9.0 inch = 228.6 mm
+	 9.5 inch = 241.3 mm
+	10.0 inch = 254.0 mm
+	10.5 inch = 266.7 mm
+	11.0 inch = 279.4 mm
+	11.5 inch = 292.1 mm
+	12.0 inch = 304.8 mm
+
+
+2)	Ohjelma:
+	  1 program ex5p1
+	  2         implicit none
+	  3         integer :: i, j, iarg
+	  4         character(10) :: kantaluku_string
+	  5         integer :: kantaluku
+	  6 
+	  7         iarg = command_argument_count()
+	  8         do i=1, iarg
+	  9                 !do j=1,6
+	 10                         call get_command_argument(i, kantaluku_string)
+	 11                         read(kantaluku_string, *) kantaluku
+	 12                         write(*,"(6(I10, A1))") (kantaluku**j, " ", j=1,6)                   
+	 13                 !end do
+	 14                 !write(*,*)
+	 15         end do
+	 16 
+	 17 end program
+
+	Output argumenteilla 5 2 7 12:
+		 5         25        125        625       3125      15625 
+		 2          4          8         16         32         64 
+		 7         49        343       2401      16807     117649 
+		12        144       1728      20736     248832    2985984
+
+
+3a)	Ohjelma:
+	  1 program ex5p3a
+	  2         implicit none
+	  3         character(len=100) :: tiedostonimi = "array"
+	  4         integer :: ios
+	  5         integer :: i
+	  6         integer :: koko = 5
+	  7         integer, dimension(5) :: array = (/ 1, 2, 3, 4, 5 /)
+	  8 
+	  9         open(unit=1, file=tiedostonimi, iostat=ios, status='new', access='stream',                       form='unformatted')
+	 10         if  (ios/=0) then
+	 11                 print '(a,a)','*** Error in opening file ',trim(tiedostonimi)
+	 12                 print *, ios
+	 13                 stop
+	 14         end if
+	 15 
+	 16         write(1) koko
+	 17         do i=1, koko
+	 18                 write(1) array(i)
+	 19         end do
+	 20 
+	 21         close(unit=1, status='keep')
+	 22 
+	 23 end program
+	 
+	hexdump -o tiedoston array sisällöstä:
+	0000000  000005  000000  000001  000000  000002  000000  000003  000000
+	0000010  000004  000000  000005  000000                                
+	0000018
+
+3b)	Ohjelma:
+	  1 program ex5p3b
+	  2         implicit none
+	  3         character(len=100) :: tiedostonimi = "array.txt"
+	  4         integer :: ios
+	  5         integer :: i
+	  6         integer :: koko
+	  7         integer :: luettu
+	  8         integer, dimension(5) :: array
+	  9 
+	 10         open(unit=1, file=tiedostonimi, iostat=ios, status='old', access='stream',                       form='unformatted')
+	 11         if  (ios/=0) then
+	 12                 print '(a,a)','*** Error in opening file ',trim(tiedostonimi)
+	 13                 print *, ios
+	 14                 stop
+	 15         end if
+	 16 
+	 17         read(1, rec=1) koko
+	 18         array = reshape(array, (/koko/))
+	 19 
+	 20         do i=2, koko
+	 21                 read(1) array(i)
+	 22         end do
+	 23 
+	 24         close(unit=1, status='keep')
+	 25 end program
+
+	Ohjelma ei tulosta mitään
+
+
+4)	Ohjelma:
+	  1 program ex5p4
+	  2         implicit none
+	  3         real :: summa = 0
+	  4         real :: input
+	  5         write(*,*) "Anna lukuja, 0 lopettaa"                                                 
+	  6         do
+	  7                 read(*,*) input 
+	  8                 if (input == 0) then
+	  9                         exit
+	 10                 else if (input > 0) then
+	 11                         summa = summa + sqrt(input)
+	 12                 end if
+	 13         end do
+	 14         write(*,*) summa
+	 15 end program
+
+	Käyttöesimerkki:
+	 Anna lukuja, 0 lopettaa
+	1
+	2
+	-5
+	0
+	   2.41421366
+
+
+5)	Ohjelma:
+	  1	program ex5p5
+	  2         implicit none
+	  3         integer :: askeleet = 0
+	  4         character(20) :: tutkittava_string
+	  5         integer :: tutkittava
+	  6         integer :: argnum
+	  7 
+	  8         argnum = command_argument_count()
+	  9         if (argnum /= 1) then
+	 10                 write(0,*) "ERROR: anna tutkittava luku komentoriviargumenttina"
+	 11                 stop
+	 12         end if
+	 13         
+	 14         call get_command_argument(1, tutkittava_string)
+	 15         read(tutkittava_string, *) tutkittava
+	 16 
+	 17         do
+	 18                 if (tutkittava == 1) then
+	 19                         write(*,*) askeleet                                                  
+	 20                         exit
+	 21                 else if (mod(tutkittava, 2) == 0) then
+	 22                         tutkittava = tutkittava/2 
+	 23                 else    
+	 24                         tutkittava = tutkittava*3+1
+	 25                 end if  
+	 26                 askeleet = askeleet + 1
+	 27         end do
+
+	Esimerkkejä parametri-output -pareista:
+	1 -> 0
+	2 -> 1
+	3 -> 7
+	10 -> 6
+	15 -> 17
+	27 -> 111
+	100 -> 25 	

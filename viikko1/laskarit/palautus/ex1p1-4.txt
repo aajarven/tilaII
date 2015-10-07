@@ -1,0 +1,136 @@
+1)      mkdir tilaII
+        mkdir tilaII/ex1
+        cd tilaII/ex1
+
+2)      wget http://www.courses.physics.helsinki.fi/fys/tilaII/files/hello.f90
+        gfortran -o hello hello.f90
+
+        output:
+         Thank you for compiling and executing
+         this program!
+
+3)      wget http://www.courses.physics.helsinki.fi/fys/tilaII/files/numbers.f90
+        gfortran -o numbers numbers.f90
+        
+        output:
+           2.66666666666666666666666666666666654      
+                   2
+           1.89999998    
+           1.89999998
+
+        Rivillä 6 lasketaan kokonaisluvun ja liukuluvun osamäärä, jolloin tuloksena on liukuluku. Jakajalle on määritelty, että sen tallentamiseen käytetään 16 tavua, jolloin luku on tarkempi.
+
+        Rivillä 7 lasketaan kokonaisluvun ja kokonaisluvun osamäärä, joten tulos on katkaisemalla desimaalit saatu kokonaisluku.
+
+        Rivillä 8 lasketaan liukuluvun ja liukuluvun osamäärä, joten tuloksena on liukuluku.
+
+        Rivillä 9 lasketaan liukuluvun ja kokonaisluvun osamäärä, joten tuloksena on liukuluku.
+
+4)      Output:
+
+           1           1
+           2           1
+           3           2
+           4           2
+           5           4
+           6           4
+           7           4
+           8           4
+           9           4
+          10           8
+          11           8
+          12           8
+          13           8
+          14           8
+          15           8
+          16           8
+          17           8
+          18           8
+          19          16
+          20          16
+          21          16
+          22          16
+          23          16
+          24          16
+          25          16
+          26          16
+          27          16
+          28          16
+          29          16
+          30          16
+          31          16
+          32          16
+          33          16
+          34          16
+          35          16
+          36          16
+          37          16
+          38          16
+          39          -1
+          40          -1
+          41          -1
+          42          -1
+          43          -1
+          44          -1
+          45          -1
+          46          -1
+          47          -1
+          48          -1
+          49          -1
+          50          -1
+        
+
+        Outputista nähdään, että suurin mahdollinen käsiteltävä signed int on 2^127-1
+
+5)      ex1p5.f90:
+        
+        !
+        ! The program calculates Bolt's average speed during his world record run in kilometers per hour
+        !
+        program prob5
+            implicit none
+            real :: matka = 100.0 ! m
+            real :: aika = 9.81 ! s 
+            real :: keskinopeus
+            
+            keskinopeus = matka/aika*3.6 ! km/h
+
+            write(*,"(F5.2,A)") keskinopeus, " km/h"
+
+        end program prob5
+        
+        
+        output:
+        36.70 km/h
+
+
+6)      ex1p6.f90:
+
+        !
+        ! The program calculates average running speed in km/h from given time (s) and distance (m)
+        !
+        program prob5
+            implicit none
+            real :: matka  ! m
+            real :: aika ! s 
+            real :: keskinopeus
+           
+            write(*,*) "Give a distance (in meters):"
+            read(*,*) matka
+            write(*,*) "Give the elapsed time (in seconds):"
+            read(*,*) aika
+
+            keskinopeus = matka/aika*3.6 ! km/h
+
+            write(*,"(F7.2,A)") keskinopeus, " km/h"
+
+        end program prob5
+
+
+        esimerkki käytöstä:
+         Give a distance (in meters):
+        100
+         Give the elapsed time (in seconds):
+        5.6
+          64.29 km/h
+ 

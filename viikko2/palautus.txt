@@ -1,0 +1,263 @@
+1	Ohjelma:
+	  1 program ex2p1
+	  2         implicit none
+	  3 
+	  4         integer :: x = 2
+	  5         integer(kind=16) :: y = 3
+	  6         integer :: z = 4
+	  7 
+	  8         write(6, "(I1, A, I1, A, I1, A, I25)"), x, "**", y, "**", z, " = ", x**y**z
+	  9         write(6, "(A, I1, A, I1, A, I1, A, I4)"), "(", x, "**", y, ")**", z, " = ", (x**y)**z
+	 10         write(6, "(I1, A, I1, A, I1, A, I25)"), x, "**(", y, "**", z, ") = ", x**(y**z)
+	 11 
+	 12 end program ex2p1
+
+	output:
+	2**3**4 = 2417851639229258349412352
+	(2**3)**4 = 4096
+	2**(3**4) = 2417851639229258349412352
+
+	Outputista nähdään, että laskut suoritetaan oikealta vasemmalle.
+
+2)	 Ohjelma:
+	  1 program ex2p2
+	  2         implicit none
+	  3         integer :: i
+	  4 
+	  5         write(*, "(A)") "do i=1,5"
+	  6         do i=1,5
+	  7                 write(*, *) i
+	  8         end do
+	  9 
+	 10         write(*, "(/, A)") "do i=5,0,-1"
+	 11         do i=5,0,-1
+	 12                 write(*, *) i
+	 13         end do
+	 14 
+	 15         write(*, "(/, A)") "do i=10,1,-2"
+	 16         do i=10,1,-2
+	 17                 write(*, *) i
+	 18         end do
+	 19 
+	 20         write(*, *) "do i=0,30,7"
+	 21         do i=0,30,7
+	 22                 write(*, *) i
+	 23         end do
+	 24 
+	 25 end program ex2p2
+
+	Output:
+	do i=1,5
+		   1
+		   2
+		   3
+		   4
+		   5
+
+	do i=5,0,-1
+		   5
+		   4
+		   3
+		   2
+		   1
+		   0
+
+	do i=10,1,-2
+		  10
+		   8
+		   6
+		   4
+		   2
+	 do i=0,30,7
+		   0
+		   7
+		  14
+		  21
+		  28
+
+	Outputista nähdään, että ensimmäinen silmukka käy läpi luvut välillä [1,5], seuraava saman välin luvut mutta käänteisessä järjestyksessä, kolmas luvut kymmenestä yhteen kahden välein (mistä syystä viimeinen tulostettava on 2) ja viimeinen seitsemällä jaolliset luvut nollasta kolmeenkymmeneen.
+
+3)	Ohjelma:
+	  1 program ex2p3
+	  2         implicit none
+	  3 
+	  4         integer :: i
+	  5         integer :: kr
+	  6 
+	  7         do i=1,40
+	  8                 kr=selected_real_kind(i, 5)
+	  9                 print *,i,kr
+	 10         end do
+	 11 
+	 12 end program ex2p3
+
+	Output:
+	           1           4
+		   2           4
+		   3           4
+		   4           4
+		   5           4
+		   6           4
+		   7           8
+		   8           8
+		   9           8
+		  10           8
+		  11           8
+		  12           8
+		  13           8
+		  14           8
+		  15           8
+		  16          10
+		  17          10
+		  18          10
+		  19          16
+		  20          16
+		  21          16
+		  22          16
+		  23          16
+		  24          16
+		  25          16
+		  26          16
+		  27          16
+		  28          16
+		  29          16
+		  30          16
+		  31          16
+		  32          16
+		  33          16
+		  34          -1
+		  35          -1
+		  36          -1
+		  37          -1
+		  38          -1
+		  39          -1
+		  40          -1
+
+	Outputista nähdään, että suurin tuettu liukuluku on 16-tavuinen.
+
+4)	ohjelma:
+	  1 program ex2p4
+	  2         implicit none
+	  3         integer :: n
+	  4         real(KIND=16) :: h=0.0
+	  5 
+	  6         do n=1, 5000000 ! harmoninen summa n=5 000 000 asti kind=4
+	  7                 h = h + 1.0_4/real(n,4)
+	  8         end do
+	  9         write(*, *) "kind=4:", h
+	 10 
+	 11         !sama kuin edellä mutta kind=8. Miten tehdä ilman copypastekoodia? koetin antaa real-            funktiolle halutun kindin jälkimmäisenä
+	 12         !parametrina, mutta sain virheilmoituksen väärästä tyypistä
+	 13         h=0
+	 14         do n=1, 5000000
+	 15                 h = h + 1.0_8/real(n,8)
+	 16         end do
+	 17         write(*, *) "kind=8:", h
+	 18 
+	 19         h=0
+	 20         do n=1, 5000000
+	 21                 h = h + 1.0_10/real(n,10)
+	 22         end do
+	 23         write(*, *) "kind=10:", h
+	 24 
+	 25         h=0
+	 26         do n=1, 5000000
+	 27                 h = h + 1.0_16/real(n,16)
+	 28         end do
+	 29         write(*, *) "kind=16:",h
+	 30 
+	 31 end program ex2p4
+
+	output:
+	 kind=4:   16.0021643008974194799520773813128471      
+	 kind=8:   16.0021642352999039517998333533802934      
+	 kind=10:   16.0021642352999040059996917364505170      
+	 kind=16:   16.0021642352999040059818868180962596
+
+	Outputista nähdään, että tulokset poikkeavat hieman toisistaan. Mitä tarkemmin summattava 1/n esitetään, sitä tarkempi tulos saadaan.
+
+5)	Ohjelma:
+	  1 program ex2p4
+	  2         implicit none
+	  3         real(KIND=4)  :: huge4
+	  4         real(KIND=8)  :: huge8
+	  5         real(KIND=10) :: huge10
+	  6         real(KIND=16) :: huge16
+	  7 
+	  8         write(*, *) "kind=4:", huge(huge4)
+	  9         write(*, *) "kind=8:", huge(huge8)
+	 10         write(*, *) "kind=10:", huge(huge10)
+	 11         write(*, *) "kind=16:", huge(huge16)
+	 12 
+	 13 end program ex2p4
+	
+	Output:
+	 kind=4:   3.40282347E+38
+	 kind=8:   1.7976931348623157E+308
+	 kind=10:   1.18973149535723176502E+4932
+	 kind=16:   1.18973149535723176508575932662800702E+4932
+	
+	Outputista nähdään suurin mahdollinen esitettävä luku kullekin kindille.
+
+6)	  Ohjelma:
+	  1 program ex2p6
+	  2         implicit none
+	  3         real :: x = 1
+	  4         
+	  5         write(*,*) "1+epsilon: ", x+epsilon(x)
+	  6         write(*,*) "1+epsilon/2: ", x+epsilon(x)/2
+	  7         write(*,*) "1-epsilon: ", x-epsilon(x)
+	  8         write(*,*) "1-epsilon/2: ", x-epsilon(x)/2
+	  9 end program ex2p6
+
+	Output:
+	 1+epsilon:    1.00000012    
+	 1+epsilon/2:    1.00000000    
+	 1-epsilon:   0.999999881    
+	 1-epsilon/2:   0.999999940
+
+	Outputista nähdään, että epsilonin puolikkaan lisääminen ei muuta ykköstä, kuten määritelmäkin sanoo. Sekä epsilonin että epsilonin puolikkaan vähentäminen kuitenkin muuttaa arvoa.
+
+bonus)	Ohjelma:
+	  1 program bonus
+	  2         implicit none
+	  3         integer(KIND=1) :: luettava=0
+	  4         
+	  5         write(*,"(A)",advance='no') "Anna luku: "
+	  6         read(*,*) luettava;
+	  7         write(6,'(b8.8)') luettava
+	  8 
+	  9 end program bonus
+
+	Esimerkkejä käytöstä:
+
+	./ex2bonus
+	Anna luku: 13  
+	00001101
+
+	./ex2bonus
+	Anna luku: 127
+	01111111
+
+	./ex2bonus
+	Anna luku: 128
+	At line 6 of file ex2bonus.f90 (unit = 5, file = 'stdin')
+	Fortran runtime error: Integer overflow while reading item 1
+
+	./ex2bonus
+	Anna luku: 0  
+	00000000
+
+	./ex2bonus
+	Anna luku: -1
+	11111111
+
+	./ex2bonus
+	Anna luku: -18
+	11101110
+
+	./ex2bonus
+	Anna luku: -128
+	1000000
+
+	Outputista nähdään, että käytössä on kahden komplementti
