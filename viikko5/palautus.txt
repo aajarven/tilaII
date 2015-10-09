@@ -127,8 +127,8 @@
 	Ohjelma ei tulosta mitään
 
 
-4)	Ohjelma:
-	  1 program ex5p4
+4)	Ohjelma ilman cycleä:
+	  1 program ex5p4nocycle
 	  2         implicit none
 	  3         real :: summa = 0
 	  4         real :: input
@@ -143,6 +143,23 @@
 	 13         end do
 	 14         write(*,*) summa
 	 15 end program
+
+	  1 program ex5p4cycle
+	  2         impli cycle [ID]     
+	  3         real :: summa = 0
+	  4         real :: input
+	  5         write(*,*) "Anna lukuja, 0 lopettaa"
+	  6         do
+	  7                 read(*,*) input
+	  8                 if (input == 0) then
+	  9                         exit
+	 10                 else if (input < 0) then
+	 11                         cycle
+	 12                 end if
+	 13                 summa = summa + sqrt(input)
+	 14         end do
+	 15         write(*,*) summa
+	 16 end program
 
 	Käyttöesimerkki:
 	 Anna lukuja, 0 lopettaa
