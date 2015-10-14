@@ -1,0 +1,175 @@
+1)	Ohjelma:
+	  1 program ex6p1
+	  2         implicit none
+	  3         integer :: i1,i2,i3,i4,i5,i6,i7,i8,i9,i10
+	  4 
+	  5         read *,i1,i2,i3,i4,i5,i6
+	  6         read *,i7,i8,i9,i10
+	  7         write(*,*) "a:"
+	  8         write(*,*) i1,i2,i3,i4,i5,i6,i7,i8,i9,i10
+	  9 
+	 10         read '(4i10)',i1,i2,i3,i4,i5,i6
+	 11         read '(4i10)',i7,i8,i9,i10
+	 12         write(*,*) "b:"
+	 13         write(*,*) i1,i2,i3,i4,i5,i6,i7,i8,i9,i10                                            
+	 14 
+	 15 end program
+
+	      -300      -250      -210      -160      -135
+	      -105       -70       -55       -28       -11
+		17        55       102       165       226
+	 a:
+		-300        -250        -210        -160        -135        -105          17          55         102         165
+	      -300      -250      -210      -160      -135
+	      -105       -70       -55       -28       -11
+		17        55       102       165       226
+	 b:
+		-300        -250        -210        -160        -105         -70          17          55         102         165
+
+	A-kohdan read lukee ensin kuusi ensimmäistä löytämäänsä lukua, joista viimeisen toiselta inputin riviltä, vaihtaa riviä ja lukee neljä lukua lisää. B-kohdassa puolestaan luetaan ensin neljä kertaa kymmenen merkin mittainen merkkijono, vaihdetaan riviä ja luetaan loput kaksi lukua. Sitten vaihdetaan riviä ja luetaan jälleen neljä lukua.
+
+2)	Ohjelma:
+	  1 program ex6p2
+	  2         implicit none
+	  3         call execute_command_line("du -h -a.")
+	  4 end program
+
+	Output:
+	12K	./.ex6p2.f90.swp
+	12K	./.palautus.txt.swp
+	16K	./ex6p1
+	512	./ex6p1.f90
+	12K	./ex6p2
+	512	./ex6p2.f90
+	57K	.
+
+
+3)	Ohjelma:
+	  1 program ex6p3
+	  2         implicit none
+	  3         real :: luettu
+	  4         integer :: iostatus
+	  5         read(*,*, iostat=iostatus) luettu
+	  6         if (iostatus>0) then
+	  7                 write(*,*) "annettu arvo ei ole reaaliluku"
+	  8                 call exit 
+	  9         end if
+	 10         write(*,*) luettu
+	 11 
+	 12 end program
+
+Esimerkkejä käytöstä:
+	1
+	   1.00000000 
+
+	2.0
+	   2.00000000
+
+	moi
+	 annettu arvo ei ole reaaliluku
+
+
+4)	Ohjelma:
+	  1 program ex6p4
+	  2         implicit none
+	  3         integer :: i, j, tulostettava
+	  4         write(*,*) "     | 1 2 3 4 5 6 7 8 9 10"
+	  5         write(*,*) "-----|--------------------------------------------"
+	  6         do i=1,10
+	  7                 write(*,"(I4, A3)", advance='no') i, " |"
+	  8                 do j=1,10
+	  9                         tulostettava = i*j
+	 10 
+	 11                         ! iffit, jotta sarakkeet eivät ole siististi päällekäin vaan jokaisen luvun
+	 12                         ! välissä on tasan yksi välilyönti
+	 13                         if (tulostettava < 10) then
+	 14                                 write(*, "(I2)", advance='no') tulostettava
+	 15                         else if (tulostettava < 100) then
+	 16                                 write(*, "(I3)", advance='no') tulostettava
+	 17                         else
+	 18                                 write(*,"(I4)", advance='no') tulostettava
+	 19                         end if
+	 20                 end do
+	 21                 write(*,*) ""
+	 22         end do
+	 23 end program 
+
+	Output:
+	      | 1 2 3 4 5 6 7 8 9 10
+	 -----|--------------------------------------------
+	   1  | 1 2 3 4 5 6 7 8 9 10 
+	   2  | 2 4 6 8 10 12 14 16 18 20 
+	   3  | 3 6 9 12 15 18 21 24 27 30 
+	   4  | 4 8 12 16 20 24 28 32 36 40 
+	   5  | 5 10 15 20 25 30 35 40 45 50 
+	   6  | 6 12 18 24 30 36 42 48 54 60 
+	   7  | 7 14 21 28 35 42 49 56 63 70 
+	   8  | 8 16 24 32 40 48 56 64 72 80 
+	   9  | 9 18 27 36 45 54 63 72 81 90 
+	  10  | 10 20 30 40 50 60 70 80 90 100 
+
+
+5)	Ohjelma:
+	  1 program ex6p5
+	  2         implicit none
+	  3         real :: operandi1, operandi2
+	  4         character(20) :: operandi1string, operandi2string
+	  5         character :: operaattori
+	  6         integer :: argnum, iostatus
+	  7 
+	  8         argnum = command_argument_count()
+	  9         if (argnum /= 3) then
+	 10                 write(*,*) "anna operandit ja operaattori välilyönneillä eroteltuna, siis                      esimerkiksi 1 + 2"
+	 11                 call exit
+	 12         end if
+	 13 
+	 14         call get_command_argument(1, operandi1string)
+	 15         read (operandi1string, *, iostat=iostatus) operandi1     
+	 16         if (iostatus /= 0) then
+	 17                 write(*,*) "ensimmäisen argumentin on oltava luku"
+	 18                 call exit
+	 19         end if
+	 20 
+	 21         call get_command_argument(2, operaattori)
+	 22         read (operaattori, "(A1)", iostat=iostatus) operaattori     
+	 23         if (iostatus /= 0) then
+	 24                 write(*,*) "operaattorin on oltava +, -, * tai /"
+	 25                 call exit
+	 26         end if
+	 27 
+	 28         call get_command_argument(3, operandi2string)
+	 29         read (operandi2string, *, iostat=iostatus) operandi2     
+	 30         if (iostatus /= 0) then
+	 31                 write(*,*) "kolmannen argumentin on oltava luku"
+	 32                 call exit
+	 33         end if
+	 34 
+	 35         if (operaattori == '+') then
+	 36                 write(*,*) operandi1 + operandi2
+	 37         else if (operaattori == '-') then
+	 38                 write(*,*) operandi1 - operandi2
+	 39         else if (operaattori == '*') then
+	 40                 write(*,*) operandi1 * operandi2
+	 41         else if (operaattori == '/') then
+	 42                 write(*,*) operandi1 / operandi2;
+	 43         else
+	 44                 write(*,*) "Toisen argumentin on oltava jokin sallituista operaattoreista                      (+, -, *, /)"
+	 45                 call exit
+	 46         end if
+	 47 end program
+
+	Esimerkkejä käytöstä:
+	./ex6p5 1 = 3
+	   1.00000000
+
+	./ex6p5 4.5 - 7
+	  -2.50000000
+
+	./ex6p5 a - 7
+	 ensimmäisen operandin on oltava luku
+
+	./ex6p5 1 \* b
+	 kolmannen argumentin on oltava luku
+
+	./ex6p5 1 c 5
+	 Toisen argumentin on oltava jokin sallituista operaattoreista (+, -, *, /) 
