@@ -9,4 +9,5 @@ program ex6p3
         end if
         write(*,*) luettu
 
-end program       
+end program      
+
