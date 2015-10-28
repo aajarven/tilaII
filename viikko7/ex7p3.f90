@@ -9,3 +9,4 @@ program ex7p3
         write(*,*) "reaaliluku: ", reaali
         write(*,*) "kokonaisluku: ", kokonais      
 end program
+
