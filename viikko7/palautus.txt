@@ -1,0 +1,134 @@
+1)	Ohjelma:
+	  1 function factorial(k) result(tulos)
+	  2         implicit none
+	  3         integer, intent(in) :: k
+	  4         integer :: tulos
+	  5         tulos = 1
+	  6 
+	  7         do i=k, 1, -1
+	  8                 tulos = tulos * i
+	  9         end do
+	 10 
+	 11 end function factorial
+
+
+2)	Ohjelma:
+	  1 function factorial(k) result(tulos)
+	  2         implicit none
+	  3         integer, intent(in) :: k
+	  4         integer :: tulos
+	  5         integer :: i
+	  6         tulos = 1
+	  7 
+	  8         do i=k, 1, -1
+	  9                 tulos = tulos * i
+	 10         end do
+	 11 
+	 12 end function factorial
+	 13 
+	 14 function sinApprox(x, termimaara) result(tulos)
+	 15         implicit none
+	 16         real, intent(in) :: x
+	 17         integer, intent(in) :: termimaara
+	 18         real :: tulos
+	 19         integer :: factorial
+	 20         real :: termi
+	 21         integer :: i
+	 22         tulos = 0
+	 23 
+	 24         do i=0, termimaara
+	 25                 tulos = tulos + ((-1)**i)*(x**(2*i+1))/factorial(2*i+1)
+	 26         end do
+	 27 end function
+	 28 
+	 29 program ex7p2
+	 30         implicit none
+	 31         real :: sini
+	 32         real :: taylorSini2
+	 33         real :: taylorSini4
+	 34         real :: sinApprox
+	 35 
+	 36         sini = sin(0.5)
+	 37         taylorSini2 = sinApprox(0.5, 2)
+	 38         taylorSini4 = sinApprox(0.5, 4)
+	 39 
+	 40         write (*,*) "intrinsic: ", sini
+	 41         write (*,*) "kahdella termillä: ", taylorSini2
+	 42         write (*,*) "neljällä termillä: ", taylorSini4
+	 43         write (*,*) "kaksitermisen ja intrinsicin ero: ", abs(sini-taylorSini2)
+	 44         write (*,*) "nelitermisen ja intrinsicin ero: ", abs(sini-taylorSini4)
+	 45 end program
+
+	Output:
+	 intrinsic:   0.479425550    
+	 kahdella termillä:   0.479427069    
+	 neljällä termillä:   0.479425520    
+	 kaksitermisen ja intrinsicin ero:    1.51991844E-06
+	 nelitermisen ja intrinsicin ero:    2.98023224E-08
+
+
+3)	moduuli:
+	  1 module cmd_line
+	  2 
+	  3   implicit none
+	  4   integer,parameter :: rk=selected_real_kind(10,20)
+	  5   integer,parameter :: MAXBUF=200
+	  6   character(len=MAXBUF),private :: argu
+	  7 
+	  8 contains
+	  9 
+	 10   ! 
+	 11   ! Define here functions 
+	 12   ! 
+	 13   ! cmd2real(i) 
+	 14   ! of type real(rk) that reads the ith command line
+	 15   ! argument, converts it to real(rk) and returns this value
+	 16   !
+	 17   ! cmd2int(i) 
+	 18   ! of type integer that reads the ith command line
+	 19   ! argument, converts it to integer and returns this value
+	 20   ! 
+	 21   ! Note that constant 'rk' and variable 'argu' can be used here. Use
+	 22   ! 'internal io' to do the conversion.
+	 23   !
+	 24 
+	 25   function cmd2real(i) result(r)
+	 26     integer, intent(in) :: i
+	 27     real(rk) :: r
+	 28     CALL getarg(i, argu)
+	 29     read(argu, *) r
+	 30   end function
+	 31 
+	 32   function cmd2int(i) result(r)
+	 33     integer, intent(in) :: i
+	 34     integer :: r
+	 35     CALL getarg(i, argu)
+	 36     read(argu, *) r
+	 37   end function  
+	 38 
+	 39 end module cmd_line
+
+	Pääohjelma:
+	  1 program ex7p3
+	  2         use cmd_line
+	  3         implicit none
+	  4         real :: reaali
+	  5         integer :: kokonais
+	  6 
+	  7         reaali = cmd2real(1)
+	  8         kokonais = cmd2int(2)
+	  9         write(*,*) "reaaliluku: ", reaali
+	 10         write(*,*) "kokonaisluku: ", kokonais      
+	 11 end program
+
+	Kääntäminen:
+	gfortran -c command_line_argument_module.f90 
+	gfortran -c ex7p3.f90 
+	gfortran -o ex7p3 ex7p3.o command_line_argument_module.o
+
+	Käyttöesimerkki:
+	./ex7p3 5.2 4
+	 reaaliluku:    5.19999981    
+	 kokonaisluku:            4
+
+
