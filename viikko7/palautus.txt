@@ -1,4 +1,4 @@
-1)	Ohjelma:
+1)	Funktio:
 	  1 function factorial(k) result(tulos)
 	  2         implicit none
 	  3         integer, intent(in) :: k
@@ -132,3 +132,78 @@
 	 kokonaisluku:            4
 
 
+4)	Funktio:
+	  1 function collatzSteps(luku) result(askeleet)
+	  2         implicit none
+	  3         integer :: askeleet
+	  4         integer, intent(in) :: luku
+	  5         integer :: tutkittava
+	  6         askeleet = 0
+	  7         tutkittava = luku
+	  8         do
+	  9                 if (tutkittava == 1) then
+	 10                         exit
+	 11                 else if (mod(tutkittava, 2) == 0) then
+	 12                         tutkittava = tutkittava/2
+	 13                 else
+	 14                         tutkittava = tutkittava*3+1
+	 15                 end if
+	 16                 askeleet = askeleet + 1
+	 17         end do
+	 18 end function collatzSteps
+
+
+5)	Funktio:
+	  1 function collatzSteps(luku) result(askeleet)
+	  2         implicit none
+	  3         integer :: askeleet
+	  4         integer, intent(in) :: luku
+	  5         integer :: tutkittava
+	  6         integer, dimension(18) :: syklit
+	  7         askeleet = 0
+	  8         tutkittava = luku
+	  9         syklit = (/ 0, -1, 1, 2, -5, -7, -10, -17,-25, -37, -55, -82, -41, -61, -91, -136, -             68, -34 /)
+	 10         do
+	 11                 if ( any(syklit == tutkittava) ) then
+	 12                         exit
+	 13                 else if (mod(tutkittava, 2) == 0) then
+	 14                         tutkittava = tutkittava/2
+	 15                 else
+	 16                         tutkittava = tutkittava*3+1
+	 17                 end if
+	 18                 askeleet = askeleet + 1
+	 19         end do
+	 20 end function collatzSteps
+
+
+6)	Ohjelma:
+	  1 recursive function Ackerman(m, n) result(tulos)
+	  2         implicit none
+	  3         integer :: tulos
+	  4         integer, intent(in) :: m, n
+	  5         
+	  6         if (m==0) then
+	  7                 tulos = n + 1
+	  8         else if (n==0) then
+	  9                 tulos = Ackerman(m-1, 1)
+	 10         else 
+	 11                 tulos = Ackerman(m-1, Ackerman(m, n-1))
+	 12         end if
+	 13 end function
+	 14 
+	 15 program ex7p6
+	 16         implicit none
+	 17         integer :: Ackerman
+	 18         write(*,*) "A(1,2) =", Ackerman(1,2)
+	 19         write(*,*) "A(2,3) =", Ackerman(2,3)
+	 20         write(*,*) "A(3,2) =", Ackerman(3,2)
+	 21         write(*,*) "A(4,1) =", Ackerman(4,1)
+	 22 end program
+
+	Output:
+	 A(1,2) =           4
+	 A(2,3) =           9
+	 A(3,2) =          29
+	 A(4,1) =       65533
+
+	A(4,1) laskemisessa kestää jonkin aikaa, mutta ohjelma laskee sen ongelmitta. Laitteissa, joissa on vähemmän muistia, laskeminen saattaa keskeytyä muistin loppumiseen.
