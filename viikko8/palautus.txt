@@ -1,0 +1,165 @@
+1)	Ohjelma:
+	  1 program ex8p1
+	  2         implicit none
+	  3         complex :: testi
+	  4         testi = complex(0.3, 0.3)
+	  5         write(*,*) sin(testi)
+	  6         write(*,*) cos(testi)
+	  7         write(*,*) tan(testi)
+	  8         write(*,*) sinh(testi)
+	  9         write(*,*) cosh(testi)
+	 10         write(*,*) tanh(testi)
+	 11         write(*,*) exp(testi)
+	 12         write(*,*) log(testi)
+	 13         !write(*,*) bessel_j0(testi) ! Error: 'x' argument of 'bessel_j0' intrinsic at (1) must be REAL
+	 14 end program
+
+	Output:
+	 ( 0.308918655    , 0.290919363    )
+	 ( 0.998650074    , -8.99919048E-02)
+	 ( 0.280804753    , 0.316616893    )
+	 ( 0.290919363    , 0.308918655    )
+	 ( 0.998650074    ,  8.99919048E-02)
+	 ( 0.316616893    , 0.280804753    )
+	 (  1.28956950    , 0.398910582    )
+	 (-0.857399225    , 0.785398185    )
+
+	Kaikki kokeilluista paisti bessel_j0 tukevat kompleksilukuja. Mikäli rivin 13 kommenttimerkin poistaa, ohjelma ei käänny ja seuraa virheilmoitus:
+	ex8p1.f90:13.29:
+
+		write(*,*) bessel_j0(testi) ! Error: 'x' argument of 'bessel_j0' intrin
+				     1
+	Error: 'x' argument of 'bessel_j0' intrinsic at (1) must be REAL
+
+
+2)	Funktio:
+	  1 recursive function tribonacci(luku) result(palautus)
+	  2         integer, intent(in) :: luku
+	  3         integer :: palautus
+	  4         if (luku <= 3) then
+	  5                 palautus = 1
+	  6         else
+	  7                 palautus = tribonacci(luku-1) + tribonacci (luku-2) + tribonacci(luku-3)
+	  8         end if
+	  9 end function
+
+	
+3)	Moduuli:
+	  1 module cmd_line
+	  2 
+	  3   implicit none
+	  4   integer,parameter :: rk=selected_real_kind(10,20)
+	  5   integer,parameter :: MAXBUF=200
+	  6   character(len=MAXBUF),private :: argu
+	  7 
+	  8 contains
+	  9 
+	 10   ! 
+	 11   ! Define here functions 
+	 12   ! 
+	 13   ! cmd2real(i) 
+	 14   ! of type real(rk) that reads the ith command line
+	 15   ! argument, converts it to real(rk) and returns this value
+	 16   !
+	 17   ! cmd2int(i) 
+	 18   ! of type integer that reads the ith command line
+	 19   ! argument, converts it to integer and returns this value
+	 20   ! 
+	 21   ! Note that constant 'rk' and variable 'argu' can be used here. Use
+	 22   ! 'internal io' to do the conversion.
+	 23   !
+	 24 
+	 25   function cmd2real(i) result(r)
+	 26     integer, intent(in) :: i
+	 27     integer :: stat
+	 28     real(rk) :: r
+	 29     integer :: length
+	 30     CALL get_command_argument(i, argu, length, stat)
+	 31     if (stat /= 0 ) then
+	 32       r = huge(r)
+	 33     else
+	 34       read(argu, *, iostat=stat) r
+	 35       if (stat /= 0) then
+	 36               r = huge(r)
+	 37       end if
+	 38     end if
+	 39   end function
+	 40 
+	 41   function cmd2int(i) result(r)
+	 42     integer, intent(in) :: i
+	 43     integer :: stat
+	 44     integer :: length
+	 45     integer :: r
+	 46     CALL get_command_argument(i, argu, length, stat)
+	 47     if (stat /= 0 ) then
+	 48       r = huge(r)
+	 49     else
+	 50       read(argu, *, iostat=stat) r
+	 51       if (stat /= 0) then
+	 52               r = huge(r)
+	 53       end if
+	 54     end if
+	 55   end function
+	 56 end module cmd_line
+
+
+4)	Funktio:
+	  1 ! laskee luku^luku^...^luku siten, että lukuja on määrä syvyys
+	  2 function tetration(luku, syvyys) result(tulos)
+	  3         integer, intent(in) :: luku, syvyys
+	  4         integer :: tulos
+	  5         integer :: kasiteltava
+	  6         integer :: eksponentti
+	  7         if (syvyys == 0) then
+	  8                 tulos = 1
+	  9         else
+	 10                 eksponentti = 1
+	 11                 do kasiteltava = 1,syvyys-1
+	 12                         eksponentti = luku**eksponentti
+	 13                 end do
+	 14                 tulos = luku ** eksponentti
+	 15         end if
+	 16 end function
+
+
+5)	Moduuli:
+	  1 module series
+	  2 contains
+	  3   function geometricSeries(start, coeff, n) result(taulukko)
+	  4     real, intent(in) :: start, coeff
+	  5     integer :: n
+	  6     real, dimension(n) :: taulukko
+	  7     integer :: i
+	  8     taulukko(1) = start
+	  9     do i=2,n
+	 10         taulukko(i)=taulukko(i-1)*coeff
+	 11     end do
+	 12   end function
+	 13 end module series
+
+6)	Moduuli:
+	  1 module ex8p6
+	  2 contains
+	  3   function myfunc(f, deg) result(tulos) 
+	  4     real, intent(in) :: deg
+	  5     real :: PI
+	  6     real, external :: f
+	  7     real :: tulos
+	  8     PI = 3.14159265
+	  9     tulos = f(deg/180.0*PI)
+	 10   end function
+	 11 end module ex8p6
+	 12 
+	 13 program test
+	 14         use ex8p6
+	 15         implicit none
+	 16         intrinsic :: sin, cos, tan
+	 17         write(*,*) myfunc(sin, 180.0)
+	 18         write(*,*) myfunc(cos, 30.0)
+	 19         write(*,*) myfunc(tan, 100.0)
+	 20 end program
+
+	Output:
+	  -8.74227766E-08
+	  0.866025388    
+	  -5.67127752 
