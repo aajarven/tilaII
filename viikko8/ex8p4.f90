@@ -1,7 +1,8 @@
 ! laskee luku^luku^...^luku siten, että lukuja on määrä syvyys
 function tetration(luku, syvyys) result(tulos)
-        integer, intent(in) :: luku, syvyys
-        integer :: tulos
+        real, intent(in) :: luku
+        integer, intent(in) :: syvyys
+        real :: tulos
         integer :: kasiteltava
         integer :: eksponentti
         if (syvyys == 0) then

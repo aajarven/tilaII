@@ -43,7 +43,15 @@
 	  8         end if
 	  9 end function
 
-	
+	Esimerkkejä funktion palauttamista arvoista:
+	tribonacci(1) = 1
+	tribonacci(5) = 5
+	tribonacci(7) = 17
+	tribonacci(10) = 105
+	tribonacci(15) = 2209
+	tribonacci(25) = 978793
+
+
 3)	Moduuli:
 	  1 module cmd_line
 	  2 
@@ -102,25 +110,53 @@
 	 55   end function
 	 56 end module cmd_line
 
+	Esimerkkejä palautettavista arvoista cmd2realilla:
+	1 -> 1.0
+	3.5 -> 3.5
+	-5 -> -5.0
+	99999999999999999999999999999999999999 -> 9.99999968E+37
+	99999999999999999999999999999999999999 -> Infinity
+	kolme -> infinity
+
+	Esimerkkejä palautettavista arvoista cmd2intillä:
+	0 -> 0
+	5 -> 5
+	99999 -> 99999
+	999999999999 -> 2147483647
+	2147483648 -> 2147483647
+	-100 -> -100
+	5.5 -> 2147483647
+	kolme -> 2147483647
+
 
 4)	Funktio:
-	  1 ! laskee luku^luku^...^luku siten, että lukuja on määrä syvyys
+	  1 ! laskee luku^luku^...^luku siten, että lukuja on määrä syvyys                               
 	  2 function tetration(luku, syvyys) result(tulos)
-	  3         integer, intent(in) :: luku, syvyys
-	  4         integer :: tulos
-	  5         integer :: kasiteltava
-	  6         integer :: eksponentti
-	  7         if (syvyys == 0) then
-	  8                 tulos = 1
-	  9         else
-	 10                 eksponentti = 1
-	 11                 do kasiteltava = 1,syvyys-1
-	 12                         eksponentti = luku**eksponentti
-	 13                 end do
-	 14                 tulos = luku ** eksponentti
-	 15         end if
-	 16 end function
+	  3         real, intent(in) :: luku
+	  4         integer, intent(in) :: syvyys
+	  5         real :: tulos
+	  6         integer :: kasiteltava
+	  7         integer :: eksponentti
+	  8         if (syvyys == 0) then
+	  9                 tulos = 1
+	 10         else
+	 11                 eksponentti = 1
+	 12                 do kasiteltava = 1,syvyys-1
+	 13                         eksponentti = luku**eksponentti
+	 14                 end do
+	 15                 tulos = luku ** eksponentti
+	 16         end if
+	 17 end function
 
+	Funktion palauttamia arvoja erilaisilla parametreilla:
+	tetration(1.0, 3) = 1.0
+	tetration(10.0, 1) = 10.0
+	tetration(10.0, 0) = 0.0
+	tetration(2.0, 2) = 4.0
+	tetration(2.0, 3) = 16.0
+	tetration(3.0, 3) = 7.62559752E+12
+	tetration(2.5, 2) = 6.25
+	
 
 5)	Moduuli:
 	  1 module series
@@ -136,6 +172,11 @@
 	 11     end do
 	 12   end function
 	 13 end module series
+
+	Esimerkkejä funktion palauttamista taulukoista:
+	geometricSeries(1.0, 2.0, 5) = [   1.00000000       2.00000000       4.00000000       8.00000000       16.0000000 ]
+	geometricSeries(-1.0, 5.0, 5) = [   -1.00000000      -5.00000000      -25.0000000      -125.000000      -625.000000  ]
+	geometricSeries(1.0, 0.5, 5) = [   1.00000000      0.500000000      0.250000000      0.125000000       6.25000000E-02  ]
 
 6)	Moduuli:
 	  1 module ex8p6
