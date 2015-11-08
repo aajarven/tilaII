@@ -24,7 +24,7 @@
 	 (  1.28956950    , 0.398910582    )
 	 (-0.857399225    , 0.785398185    )
 
-	Kaikki kokeilluista paisti bessel_j0 tukevat kompleksilukuja. Mikäli rivin 13 kommenttimerkin poistaa, ohjelma ei käänny ja seuraa virheilmoitus:
+	Kaikki kokeilluista paitsi bessel_j0 tukevat kompleksilukuja. Mikäli rivin 13 kommenttimerkin poistaa, ohjelma ei käänny ja seuraa virheilmoitus:
 	ex8p1.f90:13.29:
 
 		write(*,*) bessel_j0(testi) ! Error: 'x' argument of 'bessel_j0' intrin
