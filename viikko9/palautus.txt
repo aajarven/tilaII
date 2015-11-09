@@ -1,0 +1,35 @@
+1)	Ohjelma:
+	  1 program ex9p1
+	  2         implicit none
+	  3         character(len=80) :: string
+	  4         character(len=*), parameter :: etsittavat="1234567890"
+	  5         integer :: stat
+	  6         integer :: indeksi
+	  7 
+	  8         CALL get_command_argument(1, value=string, status=stat)
+	  9         if (stat /= 0) then
+	 10                 write(*,*) "Anna tutkittava merkkijono komentoriviargumenttina"
+	 11                 CALL exit()
+	 12         end if
+	 13 
+	 14         indeksi = scan(string, etsittavat)
+	 15         if (indeksi == 0) then
+	 16                 write(*,*) "annetussa merkkijonossa ei ole yhtään numeroa"
+	 17         else
+	 18                 write(*,*) indeksi
+	 19         end if
+	 20 end program
+
+	Esimerkkejä käyttötapauksista:
+	./ex9p1
+	 Anna tutkittava merkkijono komentoriviargumenttina
+	./ex9p1 k
+	 annetussa merkkijonossa ei ole yhtään numeroa
+	./ex9p1 k3
+           2
+	./ex9p1 pitkäsana3
+          11
+	./ex9p1 1234567890
+           1
+
+2)	
