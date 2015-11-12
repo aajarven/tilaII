@@ -1,6 +1,4 @@
-*.out
-*.swp
-.fuse_hidden*
-*.o
-*.zip
-*.mod
+*
+!/**/
+!*.f90
+!*.txt
