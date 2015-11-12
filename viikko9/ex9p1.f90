@@ -16,6 +16,7 @@ program ex9p1
                 write(*,*) "annetussa merkkijonossa ei ole yhtään numeroa"
         else
                 write(*,*) indeksi
+                write(*,*) string(indeksi:indeksi)
         end if
 end program
 

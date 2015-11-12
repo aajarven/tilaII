@@ -17,8 +17,9 @@
 	 16                 write(*,*) "annetussa merkkijonossa ei ole yhtään numeroa"
 	 17         else
 	 18                 write(*,*) indeksi
-	 19         end if
-	 20 end program
+	 19                 write(*,*) string(indeksi:indeksi)
+	 20         end if
+	 21 end program
 
 	Esimerkkejä käyttötapauksista:
 	./ex9p1
@@ -26,10 +27,14 @@
 	./ex9p1 k
 	 annetussa merkkijonossa ei ole yhtään numeroa
 	./ex9p1 k3
-           2
+		   2
+	 3
 	./ex9p1 pitkäsana3
-          11
+		  11
+	 3
 	./ex9p1 1234567890
-           1
+		   1
+	 1
+
 
 2)	
