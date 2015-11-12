@@ -1,4 +1,4 @@
-program randomnumber
+function randomnumber
   use cmd_line
   implicit none
   integer,allocatable :: seed(:)
@@ -20,6 +20,5 @@ program randomnumber
 
   print '(5f12.6)',r
 
-end program randomnumber
+end function randomnumber
 
-  
