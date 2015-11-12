@@ -37,4 +37,211 @@
 	 1
 
 
-2)	
+2)	Ohjelma:
+	  1 program ex9p2
+	  2         use cmd_line
+	  3         implicit none
+	  4         real,allocatable :: numerot(:)
+	  5         integer :: lukumaara
+	  6         real :: ylaraja
+	  7         real :: alaraja
+	  8 
+	  9         lukumaara = cmd2int(1)
+	 10         alaraja = cmd2real(3)
+	 11         ylaraja = cmd2real(4)
+	 12 
+	 13         allocate(numerot(lukumaara))
+	 14         numerot = randomnumber()
+	 15         write(*,*) 1.0*count(numerot.GT.alaraja.AND.numerot.LT.ylaraja)/lukumaara
+	 16 
+	 17 contains
+	 18         function randomnumber() result(r)
+	 19           use cmd_line
+	 20           implicit none
+	 21           integer,allocatable :: seed(:)
+	 22           real,allocatable :: r(:)
+	 23           integer :: nseed,n
+	 24 
+	 25           n=cmd2int(1)
+	 26           allocate(r(n))
+	 27 
+	 28           call random_seed(size=nseed)
+	 29           allocate(seed(nseed))
+	 30           if (command_argument_count()>1) then
+	 31              seed=cmd2int(2)
+	 32           else
+	 33              seed=876324
+	 34           end if
+	 35           call random_seed(put=seed)
+	 36           call random_number(r)
+	 37         end function
+	 38        
+	 39 end program
+
+	+ valmiiksi viime viikolla käännetty komentorivimoduuli
+
+	Ohjelmalle annetaan parametrit järjestyksessä arvottavien lukujen lukumäärä, seed, alaraja, yläraja	
+
+	Kääntäminen ja linkitys:
+	gfortran -c ex9p2.f90
+	gfortran -o ex9p2 ex9p2.o command_line_argument_module.o
+
+	Käyttöesimerkkejä:
+	./ex9p2 1000 715517 0.0 0.5
+  	  0.513999999
+	
+	./ex9p2 1000 715517 0.5 1.0
+	  0.486000001
+
+	./ex9p2 1000 70511707 0.4 0.6
+	  0.195999995    
+
+3)	Ohjelma:
+	  1 module ex9p3
+	  2 contains
+	  3         function gauss_int(f, a, b) result(tulos)
+	  4                 implicit none
+	  5                 real :: tulos
+	  6                 real, external :: f
+	  7                 real, intent(in) :: a, b
+	  8 
+	  9                 tulos = (b-a)/2*(f((a+b)/2-(b-a)/(2*sqrt(3.0)))+f((a+b)/2+f(b-a)/(2*sqrt(3.                      0))))
+	 10         end function
+	 11 end module
+	 12
+	 13 program testi
+	 14         use ex9p3
+	 15         implicit none
+	 16         intrinsic :: sin
+	 17         write(*,*) gauss_int(sin, 0.0, 1.0 )
+	 18 end program testi
+
+	Output:
+	  0.443095386
+
+	Integraalin todellinen arvo Wolfram Alphan mukaan:
+	  0.45970
+	Arvot eroavat toisistaan hieman.
+
+
+4)	Ohjelma:
+	  1 module ex9p4
+	  2         implicit none
+	  3         type vec2d
+	  4                 real :: x, y
+	  5         end type vec2d
+	  6 
+	  7         interface operator(.vcos.)
+	  8                 module procedure kulmacos
+	  9         end interface
+	 10 contains
+	 11         function kulmacos(v1, v2) result(kulma)
+	 12                 implicit none
+	 13                 type(vec2d), intent(in) :: v1, v2
+	 14                 real :: kulma
+	 15                 kulma = (v1%x*v2%x + v1%y*v2%y)/(sqrt(v1%x**2+v1%y**2)*sqrt(v2%x**2+v2%y**2))
+	 16         end function
+	 17 end module
+	 18 
+	 19 program testi
+	 20         use ex9p4
+	 21         implicit none
+	 22         type(vec2d) :: v1, v2, v3, v4, v5, v6
+	 23         v1 = vec2d(0.0, 1.0)
+	 24         v2 = vec2d(1.0, 1.0)
+	 25         v3 = vec2d(-1.0, 1.0)
+	 26         v4 = vec2d(1.0, -1.0)
+	 27         v5 = vec2d(7.0, 3.0)
+	 28         v6 = vec2d(3.0, 2.0)
+	 29         write(*,*) v1.vcos.v2
+	 30         write(*,*) v3.vcos.v4
+	 31         write(*,*) v5.vcos.v6
+	 32 end program
+
+	Output:
+	  0.707106769    
+	  -1.00000012    
+	  0.983281970
+
+
+5)	Ohjelma:
+	  1 module ex9p5
+	  2         implicit none
+	  3         real :: p = -1
+	  4         type gcn
+	  5                 real :: x, y
+	  6         end type gcn      
+	  7 contains
+	  8         function add(c1, c2) result(c)
+	  9                 implicit none
+	 10                 type(gcn), intent(in) :: c1, c2
+	 11                 type(gcn) :: c
+	 12                 c = gcn(c1%x + c2%x, c1%y + c2%y)
+	 13         end function
+	 14 
+	 15         function sub(c1, c2) result(c)
+	 16                 implicit none
+	 17                 type(gcn), intent(in) :: c1, c2
+	 18                 type(gcn) :: c
+	 19                 c = gcn(c1%x - c2%x, c1%y - c2%y)
+	 20          end function
+	 21 
+	 22         function mul(c1, c2) result(c)
+	 23                 implicit none
+	 24                 type(gcn), intent(in) :: c1, c2
+	 25                 type(gcn) :: c
+	 26                 c = gcn(c1%x*c2%x + p*c1%y*c2%y, c1%x*c2%y + c1%y*c2%x)
+	 27          end function
+	 28 
+	 29         function div(c1, c2) result(c)
+	 30                 implicit none
+	 31                 type(gcn), intent(in) :: c1, c2
+	 32                 type(gcn) :: c
+	 33                 real :: d
+	 34                 d = 1/(c2%x**2-p*c2%y**2)
+	 35                 c = gcn(d*(c1%x*c2%x + p*c1%y*c2%y), d*(-c1%x*c2%y + c1%y*c2%x))
+	 36          end function
+	 37 end module
+	 38 
+	 39 program testi
+	 40         use ex9p5
+	 41         implicit none
+	 42         type(gcn) :: gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8
+	 43         complex :: c1, c2, c3, c4, c5, c6, c7, c8
+	 44         gc1 = gcn(2.0, 3.0)
+	 45         gc2 = gcn(3.0, 4.0)
+	 46         gc3 = gcn(10.0, 2.0)
+	 47         gc4 = gcn(11.0, 8.0)
+	 48         gc5 = gcn(1.0, 2.0)
+	 49         gc6 = gcn(1.0, 1.0)
+	 50         gc7 = gcn(12.0, 9.0)
+	 51         gc8 = gcn(1.0, 4.0)
+	 52         c1 = complex(2.0, 3.0)
+	 53         c2 = complex(3.0, 4.0)
+	 54         c3 = complex(10.0, 2.0)
+	 55         c4 = complex(11.0, 8.0)
+	 56         c5 = complex(1.0, 2.0)
+	 57         c6 = complex(1.0, 1.0)
+	 58         c7 = complex(12.0, 9.0)
+	 59         c8 = complex(1.0, 4.0)
+	 60         write(*,*) "gcn:", add(gc1, gc2)
+	 61         write(*,*) "complex:", c1 + c2
+	 62         write(*,*) "gcn:", sub(gc3, gc4)
+	 63         write(*,*) "complex:", c3 - c4
+	 64         write(*,*) "gcn:", mul(gc5, gc6)
+	 65         write(*,*) "complex:", c5*c6
+	 66         write(*,*) "gcn:", div(gc7, gc8)
+	 67         write(*,*) "complex:", c7/c8
+	 68 end program
+
+	Output:
+	 gcn:   5.00000000       7.00000000    
+	 complex: (  5.00000000    ,  7.00000000    )
+	 gcn:  -1.00000000      -6.00000000    
+	 complex: ( -1.00000000    , -6.00000000    )
+	 gcn:  -1.00000000       3.00000000    
+	 complex: ( -1.00000000    ,  3.00000000    )
+	 gcn:  -1.41176474      -2.29411769    
+	 complex: (  2.82352948    , -2.29411769    )
+	
+	gcn ja fortranin oma kompleksilukutyyppi antavat samat tulokset
